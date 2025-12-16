@@ -1,0 +1,127 @@
+body {
+    padding-top: 70px;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f5f7fa;
+}
+
+/* HERO */
+.hero {
+    background: linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.45)),
+    url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e') center/cover no-repeat;
+    color: white;
+    padding: 110px 0 160px;
+}
+
+.hero h2 {
+    font-size: 2.6rem;
+    font-weight: 700;
+}
+
+/* SEARCH */
+.search-section {
+    margin-top: -90px;
+}
+
+.search-card {
+    border-radius: 18px;
+}
+
+.form-control, .form-select {
+    border-radius: 10px;
+}
+
+#kotaAsal, #kotaTujuan {
+    cursor: pointer;
+    width: 100%;
+}
+
+/* RESULT */
+.ticket-card {
+    border-radius: 15px;
+    transition: .3s;
+}
+
+.ticket-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,0,0,.1);
+}
+
+/* FOOTER */
+.footer {
+    background: #0d6efd;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    margin-top: 80px;
+}
+
+.kota-wrapper {
+    position: relative;
+}
+
+.switch-wrapper {
+    align-self: center;
+}
+
+.switch-btn {
+    margin-top: 18px; 
+}
+
+.switch-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 6px 16px rgba(0,0,0,.15);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.switch-btn i {
+    color: #0d6efd;
+}
+
+
+.switch-btn:hover {
+    background: #0d6efd;
+}
+
+.switch-btn:hover i {
+    color: #fff;
+}
+
+
+.switch-btn i {
+    font-size: 1rem;
+    color: #0d6efd;
+}
+
+
+
+/* MOBILE FIX */
+@media (max-width: 768px) {
+    .switch-btn {
+        position: static;
+        transform: none;
+        margin: 12px auto 0;
+        display: block;
+    }
+}
+
+.destinasi-card {
+    border-radius: 16px;
+    overflow: hidden;
+    transition: .3s;
+}
+
+.destinasi-card img {
+    height: 220px;
+    object-fit: cover;
+}
+
+.destinasi-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 30px rgba(0,0,0,.15);
+}
