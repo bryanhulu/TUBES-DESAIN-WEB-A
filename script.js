@@ -200,3 +200,74 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
 });
+
+// ====================
+// FILTER & SORT HARGA
+// ====================
+document.getElementById("sortHarga").addEventListener("change", function() {
+    const sortBy = this.value;
+    const resultContainer = document.getElementById("result");
+    const asal = document.getElementById("kotaAsal").value;
+    const tujuan = document.getElementById("kotaTujuan").value;
+    
+    let tiketSorted = [...daftarTiket]; 
+
+    if (sortBy === "termurah") {
+        tiketSorted.sort((a, b) => a.harga - b.harga);
+    } else if (sortBy === "termahal") {
+        tiketSorted.sort((a, b) => b.harga - a.harga);
+    }
+
+    // Render ulang tiket yang sudah di-sort
+    let html = "";
+    tiketSorted.forEach(tiket => {
+        html += `
+            <div class="card ticket-card shadow-sm mb-3">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>${asal} → ${tujuan}</strong><br>
+                        <small class="text-muted">${tiket.maskapai} • ${tiket.jam}</small>
+                    </div>
+                    <div class="fw-bold text-primary fs-5">
+                        Rp ${tiket.harga.toLocaleString("id-ID")}
+                    </div>
+                    <button class="btn btn-warning btn-sm">Pilih</button>
+                </div>
+            </div>`;
+    });
+    resultContainer.innerHTML = html;
+});
+
+
+document.getElementById("flightForm").addEventListener("submit", function() {
+    document.getElementById("filterContainer").style.display = "block";
+    
+    // Simpan ke History 
+    const history = {
+        asal: document.getElementById("kotaAsal").value,
+        tujuan: document.getElementById("kotaTujuan").value,
+        tgl: new Date().toLocaleDateString('id-ID')
+    };
+    localStorage.setItem("lastSearch", JSON.stringify(history));
+    renderHistory();
+});
+
+// ========================
+// RECENT SEARCH (HISTORY)
+// ========================
+function renderHistory() {
+    const historyBox = document.getElementById("recentSearches");
+    const data = JSON.parse(localStorage.getItem("lastSearch"));
+    
+    if (data) {
+        historyBox.innerHTML = `
+            <i class="fas fa-history"></i> Pencarian terakhir: 
+            <span class="badge bg-light text-dark border ms-1">
+                ${data.asal} <i class="fas fa-arrow-right fa-xs"></i> ${data.tujuan} (${data.tgl})
+            </span>
+        `;
+    }
+}
+
+// Jalankan fungsi history saat web pertama kali dibuka
+renderHistory();
