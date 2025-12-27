@@ -437,4 +437,4 @@ function cariTiketKe(destinasi) {
             }
         }, 500);
     }
-}npm install
+}
