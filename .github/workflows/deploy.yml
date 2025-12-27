@@ -1,0 +1,85 @@
+name: Deploy Travel.com to GitHub Pages
+
+on:
+  push:
+    branches: ["Khoiril"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Checkout code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      
+      # 2. Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      # 3. Cek apakah package.json ada
+      - name: Check for package.json
+        id: check_package
+        run: |
+          if [ -f "package.json" ]; then
+            echo "package.json exists"
+            echo "has_package=true" >> $GITHUB_OUTPUT
+          else
+            echo "package.json not found, creating basic one"
+            echo '{
+              "name": "travel-com",
+              "version": "1.0.0",
+              "scripts": {
+                "build": "echo \"No build step needed\""
+              }
+            }' > package.json
+            echo "has_package=false" >> $GITHUB_OUTPUT
+          fi
+      
+      # 4. Install dependencies jika ada package.json
+      - name: Install Dependencies
+        if: steps.check_package.outputs.has_package == 'true'
+        run: npm ci
+      
+      # 5. Build jika ada script build
+      - name: Build
+        if: steps.check_package.outputs.has_package == 'true'
+        run: npm run build
+      
+      # 6. Create dist folder and copy files
+      - name: Prepare Files
+        run: |
+          mkdir -p dist
+          # Copy semua file HTML
+          cp *.html dist/ 2>/dev/null || echo "No HTML files to copy"
+          # Copy semua file CSS
+          cp *.css dist/ 2>/dev/null || echo "No CSS files to copy"
+          # Copy semua file JS
+          cp *.js dist/ 2>/dev/null || echo "No JS files to copy"
+          # Copy assets jika ada
+          cp -r assets dist/ 2>/dev/null || echo "No assets folder"
+          cp -r img dist/ 2>/dev/null || echo "No img folder"
+          cp -r images dist/ 2>/dev/null || echo "No images folder"
+      
+      # 7. Upload artifact
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist'
+      
+      # 8. Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
