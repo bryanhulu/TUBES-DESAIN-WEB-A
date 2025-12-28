@@ -1,0 +1,14 @@
+{
+  "name": "travel-com",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "sass src/style.scss styles.css",
+    "watch": "sass --watch src/style.scss styles.css"
+  },
+  "devDependencies": {
+    "sass": "^1.97.1"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.8"
+  }
+}
