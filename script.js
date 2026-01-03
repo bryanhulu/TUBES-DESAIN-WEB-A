@@ -36,43 +36,103 @@ const daftarTiket = [
 // DATA DESTINASI WISATA
 // ===============================
 const DESTINASI_WISATA = [
-  {
-    nama: "Bali",
-    kode: "Bali (DPS)",
-    deskripsi: "Pulau Dewata dengan pantai eksotis dan budaya yang kaya",
-    image: "assets/img/bali.jpg"
-  },
-  {
-    nama: "Raja Ampat",
-    kode: "Sorong (SOQ)",
-    deskripsi: "Surga bawah laut dengan keanekaragaman hayati terbaik dunia",
-    image: "assets/img/raja-ampat.jpg"
-  },
-  {
-    nama: "Lombok",
-    kode: "Lombok (LOP)",
-    deskripsi: "Pulau eksotis dengan Gili Trawangan dan Gunung Rinjani",
-    image: "assets/img/lombok.jpg"
-  },
-  {
-    nama: "Yogyakarta",
-    kode: "Yogyakarta (YIA)",
-    deskripsi: "Kota budaya dengan Candi Borobudur dan Prambanan",
-    image: "assets/img/yogyakarta.jpg"
-  },
-  {
-    nama: "Labuan Bajo",
-    kode: "Labuan Bajo (LBJ)",
-    deskripsi: "Gerbang menuju Pulau Komodo dan satwa purba",
-    image: "assets/img/labuan-bajo.jpg"
-  },
-  {
-    nama: "Bromo",
-    kode: "Malang (MLG)",
-    deskripsi: "Gunung api aktif dengan panorama sunrise yang legendaris",
-    image: "assets/img/bromo.jpg"
-  }
+    {
+        nama: "Bali",
+        kode: "Bali (DPS)",
+        deskripsi: "Pulau Dewata dengan pantai eksotis dan budaya yang kaya",
+        image: "assets/img/bali.jpg"
+    },
+    {
+        nama: "Raja Ampat",
+        kode: "Sorong (SOQ)",
+        deskripsi: "Surga bawah laut dengan keanekaragaman hayati terbaik dunia",
+        image: "assets/img/raja-ampat.jpg"
+    },
+    {
+        nama: "Lombok",
+        kode: "Lombok (LOP)",
+        deskripsi: "Pulau eksotis dengan Gili Trawangan dan Gunung Rinjani",
+        image: "assets/img/lombok.jpg"
+    },
+    {
+        nama: "Yogyakarta",
+        kode: "Yogyakarta (YIA)",
+        deskripsi: "Kota budaya dengan Candi Borobudur dan Prambanan",
+        image: "assets/img/yogyakarta.jpg"
+    },
+    {
+        nama: "Labuan Bajo",
+        kode: "Labuan Bajo (LBJ)",
+        deskripsi: "Gerbang menuju Pulau Komodo dan satwa purba",
+        image: "assets/img/labuan-bajo.jpg"
+    },
+    {
+        nama: "Bromo",
+        kode: "Malang (MLG)",
+        deskripsi: "Gunung api aktif dengan panorama sunrise yang legendaris",
+        image: "assets/img/bromo.jpg"
+    }
 ];
+
+// ===============================
+// RENDER DESTINASI WISATA
+// ===============================
+function loadDestinasiWisata() {
+    const gallery = document.getElementById("destinasiGallery");
+    const loading = document.getElementById("destinasiLoading");
+
+    if (!gallery || !loading) {
+        console.error("Element destinasiGallery atau destinasiLoading tidak ditemukan!");
+        return;
+    }
+
+    // simulasi loading
+    setTimeout(() => {
+        loading.classList.add("d-none");
+        gallery.classList.remove("d-none");
+
+        gallery.innerHTML = "";
+
+        DESTINASI_WISATA.forEach(destinasi => {
+            const col = document.createElement("div");
+            col.className = "col-md-6 col-lg-4";
+
+            col.innerHTML = `
+                <div class="card h-100 shadow-sm border-0 destinasi-card">
+                    <img 
+                        src="${destinasi.image}" 
+                        class="card-img-top" 
+                        alt="${destinasi.nama}"
+                        loading="lazy"
+                        onerror="this.src='https://via.placeholder.com/500x300?text=Image+Not+Found'"
+                    >
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title fw-bold">${destinasi.nama}</h5>
+                        <p class="card-text text-muted small flex-grow-1">
+                            ${destinasi.deskripsi}
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted small">${destinasi.kode}</span>
+                            <button class="btn btn-primary btn-sm">
+                                ✈️ Cari Tiket
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            gallery.appendChild(col);
+        });
+    }, 800);
+}
+
+// ===============================
+// INIT SAAT HALAMAN DIMUAT
+// ===============================
+document.addEventListener("DOMContentLoaded", function () {
+    loadDestinasiWisata();
+});
+
 
 // Fungsi bantuan untuk localStorage
 function getLocalStorageData() {
@@ -176,6 +236,33 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Update recent searches
     updateRecentSearches();
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const roundTrip = document.getElementById("roundTrip");
+    const oneWay = document.getElementById("oneWay");
+    const tanggalPulangWrapper = document.getElementById("tanggalPulangWrapper");
+    const tanggalPulang = document.getElementById("tanggalPulang");
+
+    function updateTripType() {
+        if (oneWay.checked) {
+            // Sembunyikan tanggal pulang
+            tanggalPulangWrapper.style.display = "none";
+            tanggalPulang.value = "";
+            tanggalPulang.removeAttribute("required");
+        } else {
+            // Tampilkan tanggal pulang
+            tanggalPulangWrapper.style.display = "block";
+            tanggalPulang.setAttribute("required", "required");
+        }
+    }
+
+    // Event listener
+    roundTrip.addEventListener("change", updateTripType);
+    oneWay.addEventListener("change", updateTripType);
+
+    // Jalankan saat pertama kali load
+    updateTripType();
 });
 
 // Search flights
@@ -449,13 +536,3 @@ function cariTiketKe(destinasi) {
         }, 500);
     }
 }
-
-<img 
-  src="${destinasi.image}"
-  alt="${destinasi.nama}"
-  class="card-img-top"
-  style="height: 220px; object-fit: cover;"
-  loading="lazy"
-  referrerpolicy="no-referrer"
-  crossorigin="anonymous"
-/>
