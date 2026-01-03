@@ -32,7 +32,9 @@ const daftarTiket = [
     }
 ];
 
-// Data destinasi wisata
+// ===============================
+// DATA DESTINASI WISATA
+// ===============================
 const DESTINASI_WISATA = [
   {
     nama: "Bali",
@@ -71,7 +73,6 @@ const DESTINASI_WISATA = [
     image: "assets/img/bromo.jpg"
   }
 ];
-
 
 // Fungsi bantuan untuk localStorage
 function getLocalStorageData() {
@@ -172,8 +173,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Load destinasi wisata
-    loadDestinasiWisata();
     
     // Update recent searches
     updateRecentSearches();
@@ -378,36 +377,47 @@ function updateRecentSearches() {
 // Load destinasi wisata
 function loadDestinasiWisata() {
     const gallery = document.getElementById('destinasiGallery');
+    const loading = document.getElementById('destinasiLoading');
+
     if (!gallery) return;
-    
+
     let html = '';
-    
-    DESTINASI_WISATA.forEach((destinasi, index) => {
+
+    DESTINASI_WISATA.forEach(destinasi => {
         html += `
-            <div class="col-md-4 mb-4">
-                <div class="card destinasi-card h-100">
-                    <img src="${destinasi.image}" 
-                         alt="${destinasi.nama}" 
-                         class="card-img-top"
-                         style="height: 220px; object-fit: cover;"
-                         loading="lazy">
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm destinasi-card">
+                    <img 
+                        src="${destinasi.image}" 
+                        alt="${destinasi.nama}"
+                        class="card-img-top"
+                        style="height:220px; object-fit:cover"
+                        loading="lazy"
+                    >
                     <div class="card-body">
-                        <h5 class="card-title fw-bold">${destinasi.nama}</h5>
-                        <p class="card-text text-muted">${destinasi.deskripsi}</p>
+                        <h5 class="fw-bold">${destinasi.nama}</h5>
+                        <p class="text-muted">${destinasi.deskripsi}</p>
                         <div class="d-flex justify-content-between align-items-center mt-3">
-                            <button class="btn btn-primary btn-sm" onclick="cariTiketKe('${destinasi.kode}')">
-                                <i class="fas fa-plane me-1"></i> Cari Tiket
+                            <button class="btn btn-primary btn-sm"
+                                onclick="cariTiketKe('${destinasi.kode}')">
+                                ✈️ Cari Tiket
                             </button>
-                            <small class="text-muted fw-semibold">${destinasi.kode}</small>
+                            <small class="fw-semibold text-muted">${destinasi.kode}</small>
                         </div>
                     </div>
                 </div>
             </div>
         `;
     });
-    
+
+    // Render
     gallery.innerHTML = html;
+
+    // Sembunyikan spinner & tampilkan gallery
+    loading.classList.add('d-none');
+    gallery.classList.remove('d-none');
 }
+
 
 // Auto search from destination
 function cariTiketKe(destinasi) {
