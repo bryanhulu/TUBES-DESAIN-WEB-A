@@ -438,3 +438,13 @@ function cariTiketKe(destinasi) {
         }, 500);
     }
 }
+
+<img 
+  src="${destinasi.image}"
+  alt="${destinasi.nama}"
+  class="card-img-top"
+  style="height: 220px; object-fit: cover;"
+  loading="lazy"
+  referrerpolicy="no-referrer"
+  crossorigin="anonymous"
+/>
