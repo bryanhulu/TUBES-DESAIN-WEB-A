@@ -34,43 +34,44 @@ const daftarTiket = [
 
 // Data destinasi wisata
 const DESTINASI_WISATA = [
-    {
-        nama: "Bali",
-        kode: "Bali (DPS)",
-        deskripsi: "Pulau Dewata dengan pantai eksotis dan budaya yang kaya",
-        image: "https://images.unsplash.com/photo-1537953773345-d172ccf13cf1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
-    },
-    {
-        nama: "Raja Ampat",
-        kode: "Sorong (SOQ)",
-        deskripsi: "Surga bawah laut dengan keanekaragaman hayati terbaik dunia",
-        image: "https://images.unsplash.com/photo-1578319439587-0bcaa1b47b37?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
-    },
-    {
-        nama: "Lombok",
-        kode: "Lombok (LOP)",
-        deskripsi: "Pulau eksotis dengan Gili Trawangan dan Gunung Rinjani",
-        image: "https://images.unsplash.com/photo-1573991566397-45f244ca6cc0?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
-    },
-    {
-        nama: "Yogyakarta",
-        kode: "Yogyakarta (YIA)",
-        deskripsi: "Kota budaya dengan Candi Borobudur dan Prambanan",
-        image: "https://images.unsplash.com/photo-1562763451-84544b0801a8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
-    },
-    {
-        nama: "Labuan Bajo",
-        kode: "Labuan Bajo (LBJ)",
-        deskripsi: "Gerbang menuju Pulau Komodo dan satwa purba",
-        image: "https://images.unsplash.com/photo-1588666309990-d68f08e3d4c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
-    },
-    {
-        nama: "Bromo",
-        kode: "Malang (MLG)",
-        deskripsi: "Gunung api aktif dengan panorama sunrise yang legendaris",
-        image: "https://images.unsplash.com/photo-1621451537084-482c73073a0f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
-    }
+  {
+    nama: "Bali",
+    kode: "Bali (DPS)",
+    deskripsi: "Pulau Dewata dengan pantai eksotis dan budaya yang kaya",
+    image: "assets/img/bali.jpg"
+  },
+  {
+    nama: "Raja Ampat",
+    kode: "Sorong (SOQ)",
+    deskripsi: "Surga bawah laut dengan keanekaragaman hayati terbaik dunia",
+    image: "assets/img/raja-ampat.jpg"
+  },
+  {
+    nama: "Lombok",
+    kode: "Lombok (LOP)",
+    deskripsi: "Pulau eksotis dengan Gili Trawangan dan Gunung Rinjani",
+    image: "assets/img/lombok.jpg"
+  },
+  {
+    nama: "Yogyakarta",
+    kode: "Yogyakarta (YIA)",
+    deskripsi: "Kota budaya dengan Candi Borobudur dan Prambanan",
+    image: "assets/img/yogyakarta.jpg"
+  },
+  {
+    nama: "Labuan Bajo",
+    kode: "Labuan Bajo (LBJ)",
+    deskripsi: "Gerbang menuju Pulau Komodo dan satwa purba",
+    image: "assets/img/labuan-bajo.jpg"
+  },
+  {
+    nama: "Bromo",
+    kode: "Malang (MLG)",
+    deskripsi: "Gunung api aktif dengan panorama sunrise yang legendaris",
+    image: "assets/img/bromo.jpg"
+  }
 ];
+
 
 // Fungsi bantuan untuk localStorage
 function getLocalStorageData() {
