@@ -1,35 +1,17 @@
-// Data simulasi tiket
+// ===============================
+// UNSPLASH CONFIG
+// ===============================
+const UNSPLASH_ACCESS_KEY = "zq9U7lIw1dStQtE4QcI9x9crEsQLN0MP6VvfVwpMS8g";
+
+// ===============================
+// DATA SIMULASI TIKET
+// ===============================
 const daftarTiket = [
-    {
-        maskapai: "Garuda Indonesia",
-        jam: "07:00 - 10:00",
-        harga: 1250000,
-        kode: "GA-245"
-    },
-    {
-        maskapai: "Lion Air",
-        jam: "08:30 - 11:45",
-        harga: 980000,
-        kode: "JT-789"
-    },
-    {
-        maskapai: "Citilink",
-        jam: "09:15 - 12:30",
-        harga: 1050000,
-        kode: "QG-123"
-    },
-    {
-        maskapai: "Batik Air",
-        jam: "11:00 - 14:10",
-        harga: 1150000,
-        kode: "ID-456"
-    },
-    {
-        maskapai: "AirAsia",
-        jam: "13:40 - 16:50",
-        harga: 920000,
-        kode: "QZ-321"
-    }
+    { maskapai: "Garuda Indonesia", jam: "07:00 - 10:00", harga: 1250000, kode: "GA-245" },
+    { maskapai: "Lion Air", jam: "08:30 - 11:45", harga: 980000, kode: "JT-789" },
+    { maskapai: "Citilink", jam: "09:15 - 12:30", harga: 1050000, kode: "QG-123" },
+    { maskapai: "Batik Air", jam: "11:00 - 14:10", harga: 1150000, kode: "ID-456" },
+    { maskapai: "AirAsia", jam: "13:40 - 16:50", harga: 920000, kode: "QZ-321" }
 ];
 
 // ===============================
@@ -40,98 +22,142 @@ const DESTINASI_WISATA = [
         nama: "Bali",
         kode: "Bali (DPS)",
         deskripsi: "Pulau Dewata dengan pantai eksotis dan budaya yang kaya",
-        image: "assets/img/bali.jpg"
+        query: "Bali beach"
     },
     {
         nama: "Raja Ampat",
         kode: "Sorong (SOQ)",
         deskripsi: "Surga bawah laut dengan keanekaragaman hayati terbaik dunia",
-        image: "assets/img/raja-ampat.jpg"
+        query: "Raja Ampat islands"
     },
     {
         nama: "Lombok",
         kode: "Lombok (LOP)",
         deskripsi: "Pulau eksotis dengan Gili Trawangan dan Gunung Rinjani",
-        image: "assets/img/lombok.jpg"
+        query: "Lombok island"
     },
     {
         nama: "Yogyakarta",
         kode: "Yogyakarta (YIA)",
         deskripsi: "Kota budaya dengan Candi Borobudur dan Prambanan",
-        image: "assets/img/yogyakarta.jpg"
+        query: "Yogyakarta Borobudur"
     },
     {
         nama: "Labuan Bajo",
         kode: "Labuan Bajo (LBJ)",
         deskripsi: "Gerbang menuju Pulau Komodo dan satwa purba",
-        image: "assets/img/labuan-bajo.jpg"
+        query: "Labuan Bajo Komodo"
     },
     {
         nama: "Bromo",
         kode: "Malang (MLG)",
         deskripsi: "Gunung api aktif dengan panorama sunrise yang legendaris",
-        image: "assets/img/bromo.jpg"
+        query: "Mount Bromo sunrise"
     }
 ];
 
 // ===============================
-// RENDER DESTINASI WISATA
+// FETCH GAMBAR DARI UNSPLASH
 // ===============================
-function loadDestinasiWisata() {
-    const gallery = document.getElementById("destinasiGallery");
-    const loading = document.getElementById("destinasiLoading");
+async function fetchDestinationImage(query) {
+    try {
+        const res = await fetch(
+            `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=1&orientation=landscape`,
+            {
+                headers: {
+                    Authorization: `Client-ID ${UNSPLASH_ACCESS_KEY}`
+                }
+            }
+        );
 
-    if (!gallery || !loading) {
-        console.error("Element destinasiGallery atau destinasiLoading tidak ditemukan!");
-        return;
+        const data = await res.json();
+        return data.results[0]?.urls?.regular ||
+               "https://via.placeholder.com/500x300?text=No+Image";
+    } catch (err) {
+        console.error("Gagal load gambar:", err);
+        return "https://via.placeholder.com/500x300?text=Error";
     }
-
-    // simulasi loading
-    setTimeout(() => {
-        loading.classList.add("d-none");
-        gallery.classList.remove("d-none");
-
-        gallery.innerHTML = "";
-
-        DESTINASI_WISATA.forEach(destinasi => {
-            const col = document.createElement("div");
-            col.className = "col-md-6 col-lg-4";
-
-            col.innerHTML = `
-                <div class="card h-100 shadow-sm border-0 destinasi-card">
-                    <img 
-                        src="${destinasi.image}" 
-                        class="card-img-top" 
-                        alt="${destinasi.nama}"
-                        loading="lazy"
-                        onerror="this.src='https://via.placeholder.com/500x300?text=Image+Not+Found'"
-                    >
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title fw-bold">${destinasi.nama}</h5>
-                        <p class="card-text text-muted small flex-grow-1">
-                            ${destinasi.deskripsi}
-                        </p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="text-muted small">${destinasi.kode}</span>
-                            <button class="btn btn-primary btn-sm">
-                                ✈️ Cari Tiket
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            gallery.appendChild(col);
-        });
-    }, 800);
 }
 
 // ===============================
-// INIT SAAT HALAMAN DIMUAT
+// RENDER DESTINASI WISATA (API)
+// ===============================
+async function loadDestinasiWisata() {
+    const gallery = document.getElementById("destinasiGallery");
+    const loading = document.getElementById("destinasiLoading");
+
+    if (!gallery || !loading) return;
+
+    loading.classList.remove("d-none");
+    gallery.classList.add("d-none");
+    gallery.innerHTML = "";
+
+    for (const destinasi of DESTINASI_WISATA) {
+        const imageUrl = await fetchDestinationImage(destinasi.query);
+
+        const col = document.createElement("div");
+        col.className = "col-md-4";
+
+        col.innerHTML = `
+            <div class="card h-100 shadow-sm destinasi-card">
+                <img 
+                    src="${imageUrl}" 
+                    alt="${destinasi.nama}"
+                    class="card-img-top"
+                    style="height:220px; object-fit:cover"
+                    loading="lazy"
+                >
+                <div class="card-body">
+                    <h5 class="fw-bold">${destinasi.nama}</h5>
+                    <p class="text-muted">${destinasi.deskripsi}</p>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <button class="btn btn-primary btn-sm"
+                            onclick="cariTiketKe('${destinasi.kode}')">
+                            ✈️ Cari Tiket
+                        </button>
+                        <small class="fw-semibold text-muted">${destinasi.kode}</small>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        gallery.appendChild(col);
+    }
+
+    loading.classList.add("d-none");
+    gallery.classList.remove("d-none");
+}
+
+// ===============================
+// AUTO SEARCH DARI DESTINASI
+// ===============================
+function cariTiketKe(destinasi) {
+    const kotaTujuan = document.getElementById('kotaTujuan');
+    const kotaAsal = document.getElementById('kotaAsal');
+    const flightForm = document.getElementById('flightForm');
+
+    if (kotaTujuan) {
+        kotaTujuan.value = destinasi;
+        if (kotaAsal && !kotaAsal.value) {
+            kotaAsal.value = 'Jakarta (CGK)';
+        }
+
+        setTimeout(() => {
+            if (flightForm) {
+                flightForm.dispatchEvent(new Event('submit', { bubbles: true }));
+                document.getElementById('result')?.scrollIntoView({ behavior: 'smooth' });
+            }
+        }, 500);
+    }
+}
+
+// ===============================
+// INIT
 // ===============================
 document.addEventListener("DOMContentLoaded", function () {
     loadDestinasiWisata();
 });
+
 
 
 // Fungsi bantuan untuk localStorage
@@ -461,50 +487,12 @@ function updateRecentSearches() {
     }
 }
 
-// Load destinasi wisata
-function loadDestinasiWisata() {
-    const gallery = document.getElementById('destinasiGallery');
-    const loading = document.getElementById('destinasiLoading');
-
-    if (!gallery) return;
-
-    let html = '';
-
-    DESTINASI_WISATA.forEach(destinasi => {
-        html += `
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm destinasi-card">
-                    <img 
-                        src="${destinasi.image}" 
-                        alt="${destinasi.nama}"
-                        class="card-img-top"
-                        style="height:220px; object-fit:cover"
-                        loading="lazy"
-                    >
-                    <div class="card-body">
-                        <h5 class="fw-bold">${destinasi.nama}</h5>
-                        <p class="text-muted">${destinasi.deskripsi}</p>
-                        <div class="d-flex justify-content-between align-items-center mt-3">
-                            <button class="btn btn-primary btn-sm"
-                                onclick="cariTiketKe('${destinasi.kode}')">
-                                ✈️ Cari Tiket
-                            </button>
-                            <small class="fw-semibold text-muted">${destinasi.kode}</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-    });
-
     // Render
     gallery.innerHTML = html;
 
     // Sembunyikan spinner & tampilkan gallery
     loading.classList.add('d-none');
     gallery.classList.remove('d-none');
-}
-
 
 // Auto search from destination
 function cariTiketKe(destinasi) {
